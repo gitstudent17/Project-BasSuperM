@@ -12,7 +12,7 @@ class Klant extends Database{
 	public $klantemail = null;
 	public $klantnaam;
 	public $klantwoonplaats;
-	private $table_name = "Klant";	
+	private $table_name = "Klanten";	
 
 	// Methods
 	
@@ -144,7 +144,7 @@ class Klant extends Database{
 	private function BepMaxKlantId() : int {
 		
 	// Bepaal uniek nummer
-	$sql="SELECT MAX(klantId)+1 FROM $this->table_name";
+	$sql="SELECT MAX(klant_id)+1 FROM $this->table_name";
 	return  (int) self::$conn->query($sql)->fetchColumn();
 }
 	
@@ -154,19 +154,23 @@ class Klant extends Database{
 	 * @param mixed $row
 	 * @return mixed
 	 */
-	public function insertKlant($row){
-		
-		// Bepaal een unieke klantId
-		$klantId = $this->BepMaxKlantId();
+	public function insertKlant($row) {
+    	$klantId = $this->BepMaxKlantId();
 
-		// query
-		
-		
-		// Prepare
-		
-		
-		// Execute 'klantId'=>$klantId,
-				
-	}
+    	$sql = "INSERT INTO $this->table_name (klant_id, naam, adres, postcode, telefoon)
+            VALUES (:klant_id, :naam, :adres, :postcode, :telefoon)";
+
+    	$stmt = self::$conn->prepare($sql);
+
+    	$stmt->execute([
+        ':klant_id' => $klantId,
+        ':naam' => $row['naam'],
+        ':adres' => $row['adres'],
+        ':postcode' => $row['postcode'],
+        ':telefoon' => $row['telefoon'],
+    ]);
+
+    return true;
+}
 }
 ?>
