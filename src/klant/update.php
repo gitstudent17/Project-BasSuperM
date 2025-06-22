@@ -1,52 +1,66 @@
 <?php
-    // auteur: studentnaam
+    // auteur: ishika
     // functie: update class Klant
 
-    // Autoloader classes via composer
-    require '../../vendor/autoload.php';
-    use Bas\classes\Klant;
-    
-    $klant = new Klant;
+require_once 'klant.php';
+use Bas\classes\Klant;
 
-    if(isset($_POST["update"]) && $_POST["update"] == "Wijzigen"){
+$klant = new Klant();
 
-        // Code voor een update
-        
-    }
+$klantId = $_GET['klantId'] ?? null;
+$melding = '';
 
-    if (isset($_GET['klantId'])){
-        $row = $klant->getKlant($_GET['klantId']);
+if (!$klantId) {
+    die("Geen klant geselecteerd.");
+}
 
+// Klantgegevens ophalen
+$conn = $klant->getConnection();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Update uitvoeren
+    $sql = "UPDATE Klanten SET naam = :naam, adres = :adres, postcode = :postcode, telefoon = :telefoon WHERE klant_id = :klant_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([
+        ':naam' => $_POST['naam'],
+        ':adres' => $_POST['adres'],
+        ':postcode' => $_POST['postcode'],
+        ':telefoon' => $_POST['telefoon'],
+        ':klant_id' => $klantId
+    ]);
+    $melding = "Klantgegevens zijn bijgewerkt.";
+}
+
+// Klant opnieuw ophalen voor formulier
+$sql = "SELECT * FROM Klanten WHERE klant_id = :klant_id";
+$stmt = $conn->prepare($sql);
+$stmt->execute([':klant_id' => $klantId]);
+$klantData = $stmt->fetch();
+
+if (!$klantData) {
+    die("Klant niet gevonden.");
+}
 ?>
+
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crud</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
+<head><title>Klantgegevens bijwerken</title></head>
 <body>
-<h1>CRUD Klant</h1>
-<h2>Wijzigen</h2>	
-<form method="post">
-<input type="hidden" name="klantId" 
-    value="<?php if(isset($row)) { echo $row['klantId']; } ?>">
-<input type="text" name="klantnaam" required 
-    value="<?php if(isset($row)) {echo $row['klantNaam']; }?>"> *</br>
-<input type="text" name="klantemail" required 
-    value="<?php if(isset($row)) {echo $row["klantEmail"]; }?>"> *</br></br>
-<input type="submit" name="update" value="Wijzigen">
-</form></br>
+<h1>Klantgegevens bijwerken</h1>
 
-<a href="read.php">Terug</a>
+<?php if ($melding): ?>
+    <p style="color: green;"><?= $melding ?></p>
+<?php endif; ?>
+
+<form method="post" action="">
+    <label>Naam: <input type="text" name="naam" value="<?= htmlspecialchars($klantData['naam']) ?>" required></label><br>
+    <label>Adres: <input type="text" name="adres" value="<?= htmlspecialchars($klantData['adres']) ?>" required></label><br>
+    <label>Postcode: <input type="text" name="postcode" value="<?= htmlspecialchars($klantData['postcode']) ?>" required></label><br>
+    <label>Telefoon: <input type="text" name="telefoon" value="<?= htmlspecialchars($klantData['telefoon']) ?>" required></label><br>
+    <button type="submit">Opslaan</button>
+</form>
+
+<p><a href="zoeken.php">Terug naar zoeken</a></p>
 
 </body>
 </html>
-
-<?php
-    } else {
-        echo "Geen klantId opgegeven<br>";
-    }
-?>
