@@ -1,5 +1,5 @@
 <?php 
-// auteur: studentnaam
+// auteur: Ishika
 // functie: 
 
 require_once 'klant.php';

@@ -7,7 +7,7 @@ $resultaten = [];
 
 if (isset($_GET['zoek'])) {
     $zoekterm = $_GET['zoek'];
-    $resultaten = $klant->zoekOpNaam($zoekterm);
+    $resultaten = $klantId($zoekterm);
 }
 ?>
 

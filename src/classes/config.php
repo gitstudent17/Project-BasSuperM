@@ -1,5 +1,5 @@
 <?php
-// auteur: studentnaam
+// auteur: ishika
 // functie: configuratiebestand
 
 define("DATABASE", "bas_2022");

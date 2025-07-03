@@ -1,5 +1,5 @@
 <?php
-// auteur: studentnaam
+// auteur: ishika
 // functie: algemene functies 
 
 function getTableHeader(array $row) : string {

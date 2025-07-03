@@ -1,5 +1,5 @@
 <!--
-	Auteur: Studentnaam
+	Auteur: Ishika
 	Function: home page CRUD Klant
 -->
 <!DOCTYPE html>

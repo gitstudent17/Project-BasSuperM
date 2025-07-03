@@ -1,5 +1,5 @@
 <?php
-// Auteur: jouw naam
+// Auteur: ishika
 // Functie: definitie class Artikel (CRUD functionaliteit voor artikelen)
 
 namespace Bas\classes;
